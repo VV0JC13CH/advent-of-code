@@ -19,7 +19,7 @@ pub fn process(input: &str) -> miette::Result<String, AocError> {
                 .replace("six", "six6six")
                 .replace("seven", "seven7seven")
                 .replace("eight", "eight8eight")
-                .replace("nine", "nine9nine")
+                .replace("nine", "nine9nine");
             let mut it = line.chars().filter_map(|character| character.to_digit(10));
             let first = it.next().expect("should be a number");
 
