@@ -50,16 +50,49 @@ pub fn process(input: &str) -> miette::Result<i32, AocError> {
             char_counter += 1;
         }
         let mut collect_number: Vec<Digit> = vec![];
+
         if digits_in_line.len() > 0 {
             for d in 0..(digits_in_line.len()) {
-                if d != 0 {
-                    if digits_in_line[d].line_pos - digits_in_line[d - 1].line_pos == 1 {
-                        // There is next digit in line
-                        // dbg!(digits_in_line[d]);
+                if d == 0 {
+                    collect_number.push(digits_in_line[d]);
+                                            if d == digits_in_line.len() - 1 {
+                            let start_pos = collect_number[0].line_pos;
+                            let end_pos = collect_number[collect_number.len() - 1].line_pos;
+                            let mut value: String = Default::default();
+                            for dig in &collect_number {
+                                value.push(dig.value)
+                            }
+                            numbers.push(Number {
+                                line_pos_start: start_pos,
+                                line_pos_end: end_pos,
+                                counted: false,
+                                value: value.parse::<i32>().expect("Couldn't parse"),
+                                line: line_counter,
+                            });
+                        }
+
+                } else {
+                    if digits_in_line[d].line_pos
+                        - collect_number[collect_number.len() - 1].line_pos
+                        == 1
+                    {
                         collect_number.push(digits_in_line[d]);
+                        if d == digits_in_line.len() - 1 {
+                            let start_pos = collect_number[0].line_pos;
+                            let end_pos = collect_number[collect_number.len() - 1].line_pos;
+                            let mut value: String = Default::default();
+                            for dig in &collect_number {
+                                value.push(dig.value)
+                            }
+                            numbers.push(Number {
+                                line_pos_start: start_pos,
+                                line_pos_end: end_pos,
+                                counted: false,
+                                value: value.parse::<i32>().expect("Couldn't parse"),
+                                line: line_counter,
+                            });
+                        }
                     } else {
-                        // dbg!(digits_in_line[d]);
-                        // Next digit is too far or there is no next digit in line
                         let start_pos = collect_number[0].line_pos;
                         let end_pos = collect_number[collect_number.len() - 1].line_pos;
                         let mut value: String = Default::default();
@@ -76,15 +109,41 @@ pub fn process(input: &str) -> miette::Result<i32, AocError> {
                         collect_number = vec![];
                         collect_number.push(digits_in_line[d]);
                     }
-                } else {
-                    // if first digit add
-                    collect_number.push(digits_in_line[d]);
                 }
             }
+            // if d != 0 {
+            //     if digits_in_line[d].line_pos - digits_in_line[d - 1].line_pos == 1 {
+            //         // There is next digit in line
+            //         // dbg!(digits_in_line[d]);
+            //         collect_number.push(digits_in_line[d]);
+            //     } else {
+            //         // dbg!(digits_in_line[d]);
+            //         // Next digit is too far or there is no next digit in line
+            //         let start_pos = collect_number[0].line_pos;
+            //         let end_pos = collect_number[collect_number.len() - 1].line_pos;
+            //         let mut value: String = Default::default();
+            //         for dig in collect_number {
+            //             value.push(dig.value)
+            //         }
+            //         numbers.push(Number {
+            //             line_pos_start: start_pos,
+            //             line_pos_end: end_pos,
+            //             counted: false,
+            //             value: value.parse::<i32>().expect("Couldn't parse"),
+            //             line: line_counter,
+            //         });
+            //         collect_number = vec![];
+            //         collect_number.push(digits_in_line[d]);
+            //     }
+            // } else {
+            //     // if first digit add
+            //     collect_number.push(digits_in_line[d]);
+            // }
         }
         line_counter += 1;
     }
     let mut output = 0;
+    dbg!(&numbers);
 
     for s in symbols.iter_mut() {
         for n in numbers.iter_mut() {
