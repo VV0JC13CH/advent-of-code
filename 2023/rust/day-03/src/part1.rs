@@ -55,22 +55,21 @@ pub fn process(input: &str) -> miette::Result<i32, AocError> {
             for d in 0..(digits_in_line.len()) {
                 if d == 0 {
                     collect_number.push(digits_in_line[d]);
-                                            if d == digits_in_line.len() - 1 {
-                            let start_pos = collect_number[0].line_pos;
-                            let end_pos = collect_number[collect_number.len() - 1].line_pos;
-                            let mut value: String = Default::default();
-                            for dig in &collect_number {
-                                value.push(dig.value)
-                            }
-                            numbers.push(Number {
-                                line_pos_start: start_pos,
-                                line_pos_end: end_pos,
-                                counted: false,
-                                value: value.parse::<i32>().expect("Couldn't parse"),
-                                line: line_counter,
-                            });
+                    if d == digits_in_line.len() - 1 {
+                        let start_pos = collect_number[0].line_pos;
+                        let end_pos = collect_number[collect_number.len() - 1].line_pos;
+                        let mut value: String = Default::default();
+                        for dig in &collect_number {
+                            value.push(dig.value)
                         }
-
+                        numbers.push(Number {
+                            line_pos_start: start_pos,
+                            line_pos_end: end_pos,
+                            counted: false,
+                            value: value.parse::<i32>().expect("Couldn't parse"),
+                            line: line_counter,
+                        });
+                    }
                 } else {
                     if digits_in_line[d].line_pos
                         - collect_number[collect_number.len() - 1].line_pos
